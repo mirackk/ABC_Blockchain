@@ -1,7 +1,7 @@
 import hashlib
 from functools import reduce
 
-from .config import SEPERATOR
+from config import SEPERATOR
 from cryptography.hazmat.primitives import serialization as crypto_serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
@@ -27,3 +27,6 @@ class Account:
         return self.key.public_key().public_bytes(
             crypto_serialization.Encoding.OpenSSH,
             crypto_serialization.PublicFormat.OpenSSH)
+
+    def toJSON(self):
+        return json.dumps({public_key: self.get_public_key()})

@@ -1,6 +1,7 @@
 import re
+import json
 import binascii
-from .config import SEPERATOR, ARR_SEPERATOR, GENESIS_AMOUNT
+from config import SEPERATOR, ARR_SEPERATOR, GENESIS_AMOUNT
 from functools import reduce
 from cryptography.hazmat.primitives import serialization as crypto_serialization, hashes
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
@@ -55,7 +56,7 @@ class Transaction:
         return True
 
     def double_spending(self):
-        # check that output sender is current receiver
+        # TODO check that output sender is current receiver
         available_amount = self.get_available_amount()
         return available_amount < 0
 
@@ -133,3 +134,17 @@ class Transaction:
         except InvalidSignature:
             return False
         return False
+
+    def toJSON(self):
+        frm = self.former
+        ref = self.reference
+        d = {
+            'amt': self.amount,
+            'frm': self.former,
+            'ref': self.reference,
+            'snd': str(self.sender),
+            'rcv': str(self.receiver),
+            'sig': self.sig,
+            'val': self.valid
+        }
+        return d
